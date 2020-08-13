@@ -1,0 +1,332 @@
+<html>
+    <head>
+        <title>Task 1</title>
+        <link rel="stylesheet" href="Task1.css">
+    </head>
+    <body>
+        <head>
+            <h1>UNICODE</h1><hr>
+            <h1>TASK 1</h1><hr>
+        </head>
+
+        <!--input for no of registration-->
+        <div id="registration-div">
+        <h2><label>Input No. of Registerations : </label></h2>
+        <input value="" id="input-no">
+        <label id="basic-info">Range : 2(min) - 10(max) </label>
+        <label id="input-no-error"></label>
+        <br><br><br>
+        <button id="reg-sub">Submit</button>
+        <hr>
+        </div>
+
+        <!--Enter the details for ith registeration-->
+        <div id="registration-details" style="display: none ;">
+            <h2 id="userno">1st User</h2>
+            <table>
+        <tr>
+            <td><h3><label>Name</label></h3></td>
+            <td><input value="" id="name"><label id="name-error">Invalid!!</label><label id="basic-info-name">Only Characters Are Allowed</label></td>
+        </tr>
+        <tr>
+            <td><h3><label>Last Name</label></h3></td>
+            <td><input value="" id="lastname"><label id="lastname-error">Invalid!!</label><label id="basic-info-lastname">Only Characters Are Allowed</label></td>
+        </tr>
+        <tr>
+            <td><h3><label>Maths</label></h3></td>
+            <td><input value="" id="maths-marks"><label id="maths-error">Invalid!!</label></td>
+        </tr>
+        <tr>
+            <td><h3><label>English</label></h3></td>
+            <td><input value="" id="english-marks"><label id="english-error" >Invalid!!</label></td>
+        </tr>
+            </table>
+            <br><br> 
+        <button id="next">Next</button>   
+        <button id="sub-details">Submit</button>
+        </div>
+        
+        <!--Soerted Table-->
+        <div id="sorting-div">
+            <hr>
+            <h2>After Sorting</h2>
+            <table id="table-data">
+                <thead>
+                    <th>Name</th>
+                    <th>Maths</th>
+                    <th>English</th>
+                </thead>
+            </table>
+        </div>
+      
+    </body>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+
+$(document).ready(function (){
+
+//For Keeping Track
+var i = 1;
+//For storing data
+var dataarr = [];
+
+
+$("#input-no").focusin(function(){
+    $("#basic-info").fadeIn();
+    $("#input-no-error").fadeOut(0);
+});
+$("#input-no").focusout(function(){
+    $("#basic-info").fadeOut(0);
+});
+
+$("#name").focusin(function(){
+    $("#basic-info-name").fadeIn();
+    $("#name-error").fadeOut(0);
+});
+$("#name").focusout(function(){
+    $("#basic-info-name").fadeOut(0);
+});
+
+$("#lastname").focusin(function(){
+    $("#basic-info-lastname").fadeIn();
+    $("#lastname-error").fadeOut(0);
+});
+$("#lastname").focusout(function(){
+    $("#basic-info-lastname").fadeOut(0);
+});
+
+function checkRegExp(t){
+        var regx = /^([a-zA-z]+)$/;
+        if(regx.test(t)){
+           return false;
+        }else{
+            return true;
+        }
+}
+
+//Queries For Taking Input For Number Of Registration 
+$("#input-no").attr({ type:"number", min:"2", max:"10" , placeholder:"eg: 5" });
+$("#name").attr({ type:"text" , maxlength:"18" , placeholder:"eg: John" });
+$("#lastname").attr({ type:"text" , maxlength:"18" , placeholder:"eg: Puis" });
+$("#maths-marks,#english-marks").attr({ type:"number" , min:"0" ,max:"100" , placeholder:"Enter Marks Obtained" });
+$("#sub-details").css("display","none");
+$("#sorting-div").css("display",'none');
+
+
+//On clicking submit button after taking no of users
+$("#reg-sub").click(function(){
+
+//Valid Inputs for no of registartion    
+if($("#input-no").val() != "" && $("#input-no").val() > 1 && $("#input-no").val() <= 10 ){
+    $("#input-no").attr("disabled","true");
+    $("#input-no-error").css("display","none");
+    $("#reg-sub").attr("disabled","true");
+    $("#registration-details").fadeToggle();
+}
+//Invalid Inputs
+else{
+    //If Empty Field Passed
+    if($("#input-no").val() == ""){
+document.getElementById("input-no-error").innerText = "Error!! Empty Input"; 
+$("#input-no-error").css("display","inline");
+document.getElementById("input-no").value = ""; 
+    }
+    // Input = 0
+    else if($("#input-no").val() <= 1 ){
+document.getElementById("input-no-error").innerText = "Error!! Input shd be greater than minimum value"; 
+$("#input-no-error").css("display","inline");
+document.getElementById("input-no").value = ""; 
+    }
+    //Beyond the Mentioned Range
+    else{
+document.getElementById("input-no-error").innerText = "Error!! Input Value is not on range";             
+$("#input-no-error").css("display","inline");
+document.getElementById("input-no").value = ""; 
+    } 
+}
+
+});
+
+//Submitting details of users
+$("#next").click(function(){
+
+//Setting to original state on every try
+$("#name-error").css("display",'none');
+$("#lastname-error").css("display",'none');
+$("#maths-error").css("display",'none');
+$("#english-error").css("display",'none');
+$("#lastname").css("border","2px solid ");
+$("#name").css("border","2px solid ");
+$("#maths-marks").css("border","2px solid ");
+$("#english-marks").css("border","2px solid ");
+
+
+//Empty fields passed
+if( $("#name").val() == "" || $("#lastname").val() == "" || $("#maths-marks").val() == "" || $("#english-marks").val() == "" ){
+    
+    //Name field is empty
+    if($("#name").val() == ""){
+        $("#name").css("border","2px solid rgb(180, 7, 7)");
+        $("#name-error").css("display",'inline');
+    }
+    //Lastname field is empty
+    if($("#lastname").val() == ""){
+        $("#lastname").css("border","2px solid rgb(180, 7, 7)");
+        $("#lastname-error").css("display",'inline');
+    }
+    //Maths Marks Field is empty
+    if($("#maths-marks").val() == ""){
+        $("#maths-marks").css("border","2px solid rgb(180, 7, 7)");
+        $("#maths-error").css("display",'inline');
+    }
+    //English Marks Field is empty
+    if($("#english-marks").val() == ""){
+        $("#english-marks").css("border","2px solid rgb(180, 7, 7)");
+        $("#english-error").css("display",'inline');
+    }
+}
+//Invalid Inputs For Marks
+else if($("#maths-marks,#english-marks").val() < 0 || $("#maths-marks,#english-marks").val() > 100){
+    if($("#maths-marks").val() < 0 || $("#maths-marks").val() > 100){
+        $("#maths-marks").css("border","2px solid rgb(180, 7, 7)");
+        $("#maths-error").css("display",'inline');
+    }
+    if($("#english-marks").val() < 0 || $("#english-marks").val() > 100){
+        $("#english-marks").css("border","2px solid rgb(180, 7, 7)");
+        $("#english-error").css("display",'inline');
+    }
+}
+
+//Invalid Input For Name
+else if(checkRegExp(document.getElementById("name").value)){
+    $("#name").css("border","2px solid rgb(180, 7, 7)");
+    $("#name-error").css("display",'inline');
+}
+//Invalid Input For LastName
+else if(checkRegExp(document.getElementById("lastname").value)){
+    $("#lastname").css("border","2px solid rgb(180, 7, 7)");
+    $("#lastname-error").css("display",'inline');
+}
+//All Fields Are Valid
+else{
+
+$("#registration-details").fadeToggle(function(){
+ 
+add_details();
+if($(""))
+i = i + 1;
+document.getElementById("userno").innerText = i +"th User";
+document.getElementById("name").value = "";
+document.getElementById("lastname").value = "";
+document.getElementById("maths-marks").value = "";
+document.getElementById("english-marks").value = "";
+
+if( i == $("#input-no").val() ){
+    $("#sub-details").css("display",'inline');
+    $("#next").attr("disabled",'true');
+}
+});
+
+$("#registration-details").fadeToggle();
+}
+
+});
+
+//Submitting Details And Preparing Table
+$("#sub-details").click(function(){
+
+//Setting to original state on every try
+$("#name-error").css("display",'none');
+$("#lastname-error").css("display",'none');
+$("#maths-error").css("display",'none');
+$("#english-error").css("display",'none');
+$("#name").css("border","2px solid ");
+$("#lastname").css("border","2px solid ");
+$("#maths-marks").css("border","2px solid ");
+$("#english-marks").css("border","2px solid ");
+
+//Empty fields passed
+if( $("#name").val() == "" || $("#lastname").val() == "" || $("#maths-marks").val() == "" || $("#english-marks").val() == "" ){
+    
+//Name field is empty
+if($("#name").val() == ""){
+    $("#name").css("border","2px solid rgb(180, 7, 7)");
+    $("#name-error").css("display",'inline');
+}
+//Lastname field is empty
+if($("#lastname").val() == ""){
+        $("#lastname").css("border","2px solid rgb(180, 7, 7)");
+        $("#lastname-error").css("display",'inline');
+    }
+//Maths Marks Field is empty
+if($("#maths-marks").val() == ""){
+    $("#maths-marks").css("border","2px solid rgb(180, 7, 7)");
+    $("#maths-error").css("display",'inline');
+}
+//English Marks Field is empty
+if($("#english-marks").val() == ""){
+    $("#english-marks").css("border","2px solid rgb(180, 7, 7)");
+    $("#english-error").css("display",'inline');
+}
+}
+//Invalid Inputs For Marks
+else if($("#maths-marks,#english-marks").val() < 0 || $("#maths-marks,#english-marks").val() > 100){
+    if($("#maths-marks").val() < 0 || $("#maths-marks").val() > 100){
+        $("#maths-marks").css("border","2px solid rgb(180, 7, 7)");
+        $("#maths-error").css("display",'inline');
+    }
+    if($("#english-marks").val() < 0 || $("#english-marks").val() > 100){
+        $("#english-marks").css("border","2px solid rgb(180, 7, 7)");
+        $("#english-error").css("display",'inline');
+    }
+}
+
+//Invalid Input For Name
+else if(checkRegExp(document.getElementById("name").value)){//){
+    $("#name").css("border","2px solid rgb(180, 7, 7)");
+    $("#name-error").css("display",'inline');
+}
+//Invalid Input For LastName
+else if(checkRegExp(document.getElementById("lastname").value)){//){
+    $("#lastname").css("border","2px solid rgb(180, 7, 7)");
+    $("#lastname-error").css("display",'inline');
+}
+else{
+    $("#sub-details").attr("disabled","true");
+    
+    //Adding Last User 
+    add_details();
+    
+    //sorting
+    dataarr.sort(function(x,y){
+        return ((y.english + y.maths) / 2) - ((x.english + x.maths) / 2)
+    });
+    
+    //Adding Data to Table
+    for(i = 0 ; i < dataarr.length ; i++){
+        var table = document.getElementById("table-data");
+        var row = table.insertRow(-1);
+        row.insertCell(0).innerText = dataarr[i].english;
+        row.insertCell(0).innerText = dataarr[i].maths;
+        row.insertCell(0).innerText = dataarr[i].fullname;
+    }
+
+    //Displaying Table
+    $("#sorting-div").css("display",'block');
+    }
+    
+});
+
+//Function For Adding Data To Array
+function add_details(){
+    var data = {
+    fullname : ($("#name").val() + " " + $("#lastname").val() ),
+    maths : parseInt($("#maths-marks").val()),
+    english : parseInt($("#english-marks").val()),
+}
+    dataarr.push(data);
+}
+
+});
+    </script>
+</html>
